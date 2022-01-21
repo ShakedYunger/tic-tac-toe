@@ -1,0 +1,23 @@
+*,
+*::after,
+*::before {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: gotham rounded, sans-serif;
+}
+
+.row {
+  border: 1px solid black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  text-decoration: underline;
+}
+
+.square {
+  margin: 1em;
+}
+/*# sourceMappingURL=main.css.map */
