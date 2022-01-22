@@ -41,7 +41,10 @@ function onChangeMark() {
       var elCol = row.cells[j];
       elCol.onclick = function () {
         returnSign(this);
-        isWin();
+        if (isWin() === true) {
+          console.log(5);
+          return true;
+        }
       };
     }
   }
@@ -88,55 +91,42 @@ function returnSign(element) {
 function whoIsStarting(gPlayers) {
   let index = [0, 1];
   let randomNum = Math.floor(Math.random() * 2);
+  gPlayers[randomNum].isPlaying = true;
   alert(gPlayers[randomNum].name + " is starting");
 
+  index.splice(randomNum, 1);
+  gPlayers[index[0]].isPlaying = false;
   return randomNum;
 }
 
-createBoard();
-printBoard();
-onChangeMark();
+function checkCol(board) {
+  for (row = 0; row < BOARD_SIZE; row++) {
+    returnsColumn = [];
+    for (col = 0; col < BOARD_SIZE; col++) {
+      returnsColumn.push(board[col][row]);
+    }
+    if (checkRow(returnsColumn) === true) {
+      return true;
+    }
+  }
+}
 
-function getDiagonal(board) {
+function checkDiagonal(board) {
   var list = [];
   for (num = 0; num < BOARD_SIZE; num++) {
     list.push(board[num][num]);
   }
-  return list;
+  return checkRow(list);
 }
 
-function getSecondaryDiagonal(board) {
+function checkSecondaryDiagonal(board) {
   var list2 = [];
   row = 0;
   for (num = BOARD_SIZE - 1; num >= 0; num--) {
     list2.push(board[row][num]);
     row++;
   }
-  return list2;
-}
-
-function getFirstCol(board) {
-  col = [];
-  for (row = 0; row < BOARD_SIZE; row++) {
-    col.push(board[row][BOARD_SIZE - 3]);
-  }
-  return col;
-}
-
-function getSecondCol(board) {
-  col = [];
-  for (row = 0; row < BOARD_SIZE; row++) {
-    col.push(board[row][BOARD_SIZE - 2]);
-  }
-  return col;
-}
-
-function getThirdCol(board) {
-  col = [];
-  for (row = 0; row < BOARD_SIZE; row++) {
-    col.push(board[row][BOARD_SIZE - 1]);
-  }
-  return col;
+  return checkRow(list2);
 }
 
 function checkRow(row) {
@@ -145,8 +135,10 @@ function checkRow(row) {
 
   if (XfilterValue.length == BOARD_SIZE) {
     alert(gPlayers[0].name + " has won!");
+    return true;
   } else if (OfilterValue.length == BOARD_SIZE) {
     alert(gPlayers[1].name + " has won");
+    return true;
   } else {
     return false;
   }
@@ -166,16 +158,33 @@ function getInnerBoard() {
 
 function isWin() {
   board = getInnerBoard();
-  if (checkRow(getDiagonal(board))) {
-  } else if (checkRow(getSecondaryDiagonal(board))) {
-  } else if (checkRow(getFirstCol(board))) {
-  } else if (checkRow(getSecondCol(board))) {
-  } else if (checkRow(getThirdCol(board))) {
+  if (checkDiagonal(board) === true) {
+    console.log(1);
+    return true;
+  } else if (checkSecondaryDiagonal(board) === true) {
+    console.log(2);
+    return true;
+  } else if (checkCol(board) === true) {
+    console.log(3);
+    return true;
   } else {
     for (const row of board) {
       if (checkRow(row) === true) {
-        console.log("player is win!");
+        console.log(4);
+        return true;
       }
     }
   }
 }
+
+function game() {
+  createBoard();
+  printBoard();
+  onChangeMark();
+  if (onChangeMark() === true) {
+    console.log(6);
+    alert("game over!");
+    // window.stop();
+  }
+}
+game();
