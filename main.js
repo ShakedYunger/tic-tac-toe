@@ -1,18 +1,19 @@
 var gPlayers = [
-  { player: "X", name: prompt("enter the name of the first player") },
-  { player: "O", name: prompt("enter the name of the second player") },
+  // { player: "X", name: prompt("enter the name of the first player") },
+  // { player: "O", name: prompt("enter the name of the second player") },
+  { sign: "X", name: "shaked" },
+  { sign: "O", name: "naor" },
 ];
 
 const BOARD = [];
 const BOARD_SIZE = 3;
-var rounds = 0;
-var IndexOfStartingPlayer = whoIsStarting(gPlayers);
+var indexOfCurrentPlayer = whoIsStarting(gPlayers);
 
 function createBoard() {
   for (let row = 0; row < BOARD_SIZE; row++) {
     BOARD[row] = [];
     for (let col = 0; col < BOARD_SIZE; col++) {
-      BOARD[row][col] = "[ ]";
+      BOARD[row][col] = "";
     }
   }
 }
@@ -30,7 +31,24 @@ function printBoard() {
   }
 }
 
+function printWinner() {
+  let a = document.createElement("div");
+  a.setAttribute("class", "winMassage");
+  a.innerText = "asoihdasiud";
+  // a.innerText(gPlayers[indexOfCurrentPlayer].name + " has won");
+}
+
 function onChangeMark() {
+  if (isWin() !== true && this.innerText == "") {
+    setSign(this);
+    nextTurn();
+  } else {
+    printWinner();
+    return;
+  }
+}
+
+function addingOnclick() {
   let elBoard = document.getElementById("board");
   for (var i = 0, row; (row = elBoard.rows[i]); i++) {
     //iterate through rows
@@ -38,54 +56,27 @@ function onChangeMark() {
     for (var j = 0, col; (col = row.cells[j]); j++) {
       //iterate through columns
       //columns would be accessed using the "col" variable assigned in the for loop
-      var elCol = row.cells[j];
-      elCol.onclick = function () {
-        returnSign(this);
-        if (isWin() === true) {
-          console.log(5);
-          return true;
-        }
-      };
+      var elCell = row.cells[j];
+
+      elCell.addEventListener("click", onChangeMark);
     }
   }
 }
 
-function isPlaying(gPlayers) {
-  let index = IndexOfStartingPlayer;
-  if (gPlayers[index].isPlaying == true) {
-    gPlayers[index].isPlaying = false;
-    if (index == 1) {
-      index--;
-    } else {
-      index++;
-    }
-    gPlayers[index].isPlaying = true;
-    rounds += 1;
-    IndexOfStartingPlayer = index;
-    return gPlayers[index];
+function nextTurn() {
+  let index = indexOfCurrentPlayer;
+  if (index == 1) {
+    index = 0;
   } else {
-    gPlayers[index].isPlaying = true;
-    player = gPlayers[index];
-    IndexOfStartingPlayer = index;
-    if (index == 1) {
-      index--;
-    } else {
-      index++;
-    }
-    gPlayers[index].isPlaying = false;
-    rounds += 1;
-    return player;
+    index = 1;
   }
+  indexOfCurrentPlayer = index;
 }
 
-function returnSign(element) {
-  if (rounds < 1) {
-    element.innerText = gPlayers[IndexOfStartingPlayer].player;
-    rounds += 1;
-  } else {
-    isPlaying(gPlayers);
-    element.innerText = gPlayers[IndexOfStartingPlayer].player;
-  }
+function setSign(cell) {
+  let sign = gPlayers[indexOfCurrentPlayer].sign;
+  cell.innerText = sign;
+  cell.setAttribute("class", sign);
 }
 
 function whoIsStarting(gPlayers) {
@@ -134,13 +125,29 @@ function checkRow(row) {
   let OfilterValue = row.filter((item) => item == "O");
 
   if (XfilterValue.length == BOARD_SIZE) {
-    alert(gPlayers[0].name + " has won!");
+    // alert(gPlayers[0].name + " has won!");
     return true;
   } else if (OfilterValue.length == BOARD_SIZE) {
-    alert(gPlayers[1].name + " has won");
+    // alert(gPlayers[1].name + " has won");
     return true;
   } else {
     return false;
+  }
+}
+
+function isDraw(table) {
+  let cells = [];
+  for (const row of table) {
+    for (const cell of row) {
+      if (cell == "X") {
+        cells.push(cell);
+      } else if (cell === "O") {
+        cells.push(cell);
+      }
+    }
+  }
+  if (cells.length == 9) {
+    alert("its a draw!");
   }
 }
 
@@ -156,35 +163,44 @@ function getInnerBoard() {
   return innerBoard;
 }
 
-function isWin() {
-  board = getInnerBoard();
-  if (checkDiagonal(board) === true) {
-    console.log(1);
-    return true;
-  } else if (checkSecondaryDiagonal(board) === true) {
-    console.log(2);
-    return true;
-  } else if (checkCol(board) === true) {
-    console.log(3);
-    return true;
-  } else {
-    for (const row of board) {
-      if (checkRow(row) === true) {
-        console.log(4);
-        return true;
-      }
+function getRow(board) {
+  for (const row of board) {
+    if (checkRow(row) === true) {
+      return true;
     }
   }
 }
 
-function game() {
-  createBoard();
-  printBoard();
-  onChangeMark();
-  if (onChangeMark() === true) {
-    console.log(6);
-    alert("game over!");
-    // window.stop();
+function isWin() {
+  board = getInnerBoard();
+  if (checkDiagonal(board) === true) {
+    return true;
+  } else if (checkSecondaryDiagonal(board) === true) {
+    return true;
+  } else if (checkCol(board) === true) {
+    return true;
+  } else if (getRow(board) === true) {
+    return true;
+  } else {
+    isDraw(board);
+  }
+  return false;
+}
+
+function resetBoard() {
+  let elBoard = document.getElementById("board");
+  for (const row of elBoard.rows) {
+    for (const cell of row.cells) {
+      cell.innerText = "";
+      cell.removeAttribute("class");
+    }
   }
 }
-game();
+
+function createGameBoard() {
+  createBoard();
+  printBoard();
+  addingOnclick();
+}
+
+createGameBoard();

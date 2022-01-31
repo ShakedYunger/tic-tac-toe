@@ -1,23 +1,41 @@
 *,
 *::after,
 *::before {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   font-family: gotham rounded, sans-serif;
 }
 
-.row {
-  border: 1px solid black;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  text-decoration: underline;
+body {
+  background-color: purple;
 }
 
-.square {
-  margin: 1em;
+table {
+  padding: 10px;
+  padding-top: 110px;
+  margin: auto;
 }
-/*# sourceMappingURL=main.css.map */
+
+td {
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  font-size: 50px;
+  text-align: center;
+  transition-delay: 0.1 s;
+}
+
+td:hover {
+  background-color: rgba(0, 0, 0, 0.438);
+  color: aliceblue;
+}
+
+.O,
+.X {
+  cursor: not-allowed;
+}
+
+.winMassage {
+  font-size: 10em;
+  position: absolute;
+}
