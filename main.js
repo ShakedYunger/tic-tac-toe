@@ -32,20 +32,28 @@ function printBoard() {
 }
 
 function printWinner() {
-  let a = document.createElement("div");
-  a.setAttribute("class", "winMassage");
-  a.innerText = "asoihdasiud";
-  // a.innerText(gPlayers[indexOfCurrentPlayer].name + " has won");
+  console.log("winner!");
+  let mainDiv = document.getElementById("whileIsWin");
+  mainDiv.id = "winMassage";
+  let winner = document.createElement("div");
+  winner.id = "winner";
+  winner.innerText = gPlayers[indexOfCurrentPlayer].name + " has won";
+  document.getElementById("winMassage").appendChild(winner);
 }
 
 function onChangeMark() {
-  if (isWin() !== true && this.innerText == "") {
+  if (this.innerText === "") {
     setSign(this);
-    nextTurn();
-  } else {
-    printWinner();
-    return;
+    console.log(isWin());
+    if (isWin()) {
+      document.getElementById("board").setAttribute("class", "disable");
+      document.getElementById("resetButton").removeAttribute("class");
+      printWinner();
+    } else {
+      nextTurn();
+    }
   }
+  return;
 }
 
 function addingOnclick() {
@@ -173,34 +181,60 @@ function getRow(board) {
 
 function isWin() {
   board = getInnerBoard();
+  let resetButton = document.getElementsByClassName("hidden");
   if (checkDiagonal(board) === true) {
+    // resetButton.removeAttribute("class");
     return true;
   } else if (checkSecondaryDiagonal(board) === true) {
+    // resetButton.removeAttribute("class");
     return true;
   } else if (checkCol(board) === true) {
+    // resetButton.removeAttribute("class");
     return true;
   } else if (getRow(board) === true) {
+    // resetButton.removeAttribute("class");
     return true;
   } else {
+    // resetButton.removeAttribute("class")
     isDraw(board);
   }
   return false;
 }
 
-function resetBoard() {
+function clearBoard() {
   let elBoard = document.getElementById("board");
+  let resetButton = document.createElement("div");
   for (const row of elBoard.rows) {
     for (const cell of row.cells) {
       cell.innerText = "";
       cell.removeAttribute("class");
+      document.getElementById("board").removeAttribute("class");
+      document.getElementById("winner").innerText = "";
+      resetButton.className = "hidden";
     }
   }
+}
+
+function hideButton() {
+  let mainDiv = document.getElementById("whileIsWin");
+  let resetButton = document.createElement("div");
+  resetButton.id = "resetButton";
+  resetButton.className = "hidden";
+  // resetButton.style.display = "none";
+  mainDiv.appendChild(resetButton);
+  resetButton.innerText = "Reset Board";
+}
+
+function resetBoard() {
+  hideButton();
+  let resetButton = document.getElementById("resetButton");
+  resetButton.addEventListener("click", clearBoard);
+  clearBoard();
 }
 
 function createGameBoard() {
   createBoard();
   printBoard();
   addingOnclick();
+  resetBoard();
 }
-
-createGameBoard();
