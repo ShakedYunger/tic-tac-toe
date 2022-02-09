@@ -9,44 +9,73 @@ body {
   background-color: rgb(102, 30, 31);
 }
 
-table {
-  padding: 10px;
-  padding-top: 110p;
-  margin: auto;
-}
-
-td {
-  background-color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  width: 150px;
-  height: 150px;
-  font-size: 50px;
-  text-align: center;
-}
-
-td:hover {
-  background-color: rgba(0, 0, 0, 0.438);
-  color: rgb(243, 255, 240);
-}
-
 .O,
 .X {
   cursor: not-allowed;
-}
-
-.mainDiv {
-  position: absolute;
-}
-
-#winMassage {
-  font-size: 5em;
-  position: absolute;
 }
 
 .disable {
   pointer-events: none;
 }
 
-.hidden {
+.hidden#whileIsWin {
   display: none;
+}
+
+table {
+  position: absolute;
+  font-size: 5em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+td {
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  min-width: 150px;
+  height: 150px;
+  font-size: 100px;
+  text-align: center;
+}
+
+td:hover {
+  background-color: rgba(0, 0, 0, 0.329);
+  color: rgb(243, 255, 240);
+  transition: all ease-in-out 0.25s;
+}
+
+#whileIsWin {
+  position: fixed;
+  font-size: 3em;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.432);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10em;
+}
+
+#winner {
+  text-align: center;
+  color: rgb(255, 255, 255);
+}
+
+#resetButton {
+  text-align: center;
+  cursor: pointer;
+  background-color: white;
+  border: 5px solid rgb(0, 0, 0);
+  color: black;
+  padding: 10px;
+  transition: all ease-in-out 0.25s;
+}
+
+#resetButton:hover {
+  color: aliceblue;
+  background-color: black;
+  border: 5px solid rgb(253, 253, 253);
 }
